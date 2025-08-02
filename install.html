@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installer Elias Dechler - Escape Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .install-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: 'EB Garamond', serif;
+        }
+        .install-section {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .platform-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .platform-tab {
+            background: var(--secondary-color);
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .platform-tab.active {
+            background: var(--accent-color);
+        }
+        .platform-content {
+            display: none;
+        }
+        .platform-content.active {
+            display: block;
+        }
+        .step {
+            background: rgba(102, 0, 0, 0.2);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .step-number {
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        .qr-code {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .download-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, var(--accent-color), #880000);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .feature-card {
+            background: rgba(102, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .browser-support {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .browser-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(102, 0, 0, 0.1);
+            border-radius: 6px;
+        }
+        .supported { color: var(--success-color); }
+        .partial { color: var(--warning-color); }
+        .not-supported { color: var(--error-color); }
+    </style>
+</head>
+<body>
+    <div class="install-page">
+        <h1 class="app-title">Installer Elias Dechler</h1>
+        <p class="subtitle">Escape Game Mobile - Installation facile</p>
+
+        <!-- Platform Selection -->
+        <div class="install-section">
+            <h2>Choisissez votre plateforme</h2>
+            <div class="platform-tabs">
+                <button class="platform-tab active" onclick="showPlatform('android')">📱 Android</button>
+                <button class="platform-tab" onclick="showPlatform('ios')">🍎 iOS</button>
+                <button class="platform-tab" onclick="showPlatform('windows')">🪟 Windows</button>
+                <button class="platform-tab" onclick="showPlatform('web')">🌐 Web (PWA)</button>
+            </div>
+
+            <!-- Android Installation -->
+            <div id="android-content" class="platform-content active">
+                <h3>Installation Android</h3>
+                <div class="download-links">
+                    <a href="#" class="download-btn" onclick="installPWA()">
+                        📱 Installer comme App
+                    </a>
+                    <a href="https://github.com/EliasDechl/EliasDechl-App/releases/latest/download/elias-dechler.apk" class="download-btn">
+                        📦 Télécharger APK
+                    </a>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Méthode recommandée :</strong> Cliquez sur "Installer comme App" ci-dessus
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Alternative :</strong> Téléchargez l'APK, activez "Sources inconnues" dans les paramètres, puis installez
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Accès :</strong> L'application apparaîtra sur votre écran d'accueil
+                </div>
+            </div>
+
+            <!-- iOS Installation -->
+            <div id="ios-content" class="platform-content">
+                <h3>Installation iOS (iPhone/iPad)</h3>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Ouvrez cette page dans <strong>Safari</strong> (pas Chrome)
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Appuyez sur le bouton <strong>Partager</strong> (carré avec flèche vers le haut)
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Sélectionnez <strong>"Ajouter à l'écran d'accueil"</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    Confirmez en appuyant sur <strong>"Ajouter"</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">5</span>
+                    L'icône apparaîtra sur votre écran d'accueil
+                </div>
+            </div>
+
+            <!-- Windows Installation -->
+            <div id="windows-content" class="platform-content">
+                <h3>Installation Windows</h3>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Ouvrez cette page dans <strong>Microsoft Edge</strong> ou <strong>Chrome</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Cliquez sur l'icône <strong>"Installer l'application"</strong> dans la barre d'adresse
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Ou utilisez le menu <strong>⋯ > Applications > Installer cette site en tant qu'application</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    L'application sera disponible dans le menu Démarrer
+                </div>
+            </div>
+
+            <!-- Web PWA Installation -->
+            <div id="web-content" class="platform-content">
+                <h3>Installation Web (PWA)</h3>
+                <div class="download-links">
+                    <button class="download-btn" onclick="installPWA()">
+                        🌐 Installer maintenant
+                    </button>
+                    <a href="index.html" class="download-btn">
+                        🔗 Ouvrir dans le navigateur
+                    </a>
+                </div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Cliquez sur "Installer maintenant" ou recherchez l'icône d'installation dans votre navigateur
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    L'application fonctionnera hors ligne après installation
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Accès rapide depuis le bureau ou menu d'applications
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="install-section">
+            <h2>Installation rapide par QR Code</h2>
+            <p>Scannez ce QR code avec votre téléphone :</p>
+            <div class="qr-code">
+                <canvas id="qr-canvas" width="200" height="200"></canvas>
+            </div>
+            <button class="btn btn-secondary" onclick="generateInstallQR()">Générer QR Code</button>
+        </div>
+
+        <!-- Features Section -->
+        <div class="install-section">
+            <h2>Fonctionnalités de l'application</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🎮 Escape Game</h4>
+                    <p>Déverrouillez des vidéos avec des mots-clés</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Mode Hors Ligne</h4>
+                    <p>Fonctionne sans connexion internet</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚙️ Interface Admin</h4>
+                    <p>Gestion complète des contenus</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Thème Horreur</h4>
+                    <p>Ambiance gothique immersive</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browser Support -->
+        <div class="install-section">
+            <h2>Compatibilité des navigateurs</h2>
+            <div class="browser-support">
+                <div class="browser-item">
+                    <div class="supported">✅</div>
+                    <strong>Chrome</strong><br>
+                    Android/PC
+                </div>
+                <div class="browser-item">
+                    <div class="supported">✅</div>
+                    <strong>Edge</strong><br>
+                    Windows
+                </div>
+                <div class="browser-item">
+                    <div class="supported">✅</div>
+                    <strong>Safari</strong><br>
+                    iOS/macOS
+                </div>
+                <div class="browser-item">
+                    <div class="partial">⚠️</div>
+                    <strong>Firefox</strong><br>
+                    Limité
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="install-section">
+            <h2>Résolution de problèmes</h2>
+            <div class="step">
+                <strong>L'option d'installation n'apparaît pas :</strong>
+                <p>Assurez-vous d'utiliser un navigateur compatible et que JavaScript est activé.</p>
+            </div>
+            <div class="step">
+                <strong>Erreur lors de l'installation :</strong>
+                <p>Redémarrez votre navigateur et réessayez. Vérifiez votre connexion internet.</p>
+            </div>
+            <div class="step">
+                <strong>Application lente :</strong>
+                <p>Fermez et rouvrez l'application. Vérifiez l'espace de stockage disponible.</p>
+            </div>
+        </div>
+
+        <div class="install-section">
+            <h2>Support</h2>
+            <p>Pour toute question ou problème :</p>
+            <ul>
+                <li>📧 Email : support@eliasdeckler.com</li>
+                <li>🌐 Site web : https://eliasdeckler.com</li>
+                <li>📱 Téléphone : +33 1 23 45 67 89</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // Platform switching
+        function showPlatform(platform) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.platform-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.platform-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(platform + '-content').classList.add('active');
+        }
+
+        // PWA Installation
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((result) => {
+                    if (result.outcome === 'accepted') {
+                        alert('Application installée avec succès !');
+                    } else {
+                        alert('Installation annulée. Vous pouvez installer plus tard via les paramètres du navigateur.');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Fallback instructions
+                const userAgent = navigator.userAgent;
+                let instructions = '';
+                
+                if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+                    instructions = 'Pour iOS : Utilisez Safari > Bouton Partager > Ajouter à l\'écran d\'accueil';
+                } else if (userAgent.includes('Android')) {
+                    instructions = 'Pour Android : Utilisez Chrome > Menu ⋯ > Ajouter à l\'écran d\'accueil';
+                } else {
+                    instructions = 'Recherchez l\'option "Installer l\'application" dans votre navigateur.';
+                }
+                
+                alert(instructions);
+            }
+        }
+
+        // QR Code generation
+        function generateInstallQR() {
+            const canvas = document.getElementById('qr-canvas');
+            const url = window.location.href.replace('install.html', 'index.html');
+            
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(canvas, url, {
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    margin: 2
+                }, function (error) {
+                    if (error) {
+                        console.error('Erreur QR Code:', error);
+                    } else {
+                        console.log('QR Code généré avec succès');
+                    }
+                });
+            } else {
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fillRect(0, 0, 200, 200);
+                ctx.fillStyle = '#000';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('QR Code', 100, 90);
+                ctx.fillText('Non disponible', 100, 110);
+            }
+        }
+
+        // Auto-generate QR code on page load
+        setTimeout(generateInstallQR, 1000);
+    </script>
+</body>
+</html>

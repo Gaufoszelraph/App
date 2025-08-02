@@ -14,131 +14,87 @@ let appData = {
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
+    // Wait for Cordova to load
+    document.addEventListener('deviceready', onDeviceReady, false);
+    
+    // If not in Cordova, initialize directly
+    if (typeof cordova === 'undefined') {
+        onDeviceReady();
+    }
+});
+
+function onDeviceReady() {
+    console.log('Device ready - Elias Dechler app starting');
+    
+    // Hide splash screen
+    if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
+    }
+    
+    // Set status bar style
+    if (StatusBar) {
+        StatusBar.styleBlackOpaque();
+        StatusBar.backgroundColorByHexString('#1a0000');
+    }
+    
     loadData();
-    registerServiceWorker();
-    setupInstallPrompt();
     setTimeout(() => {
         hideScreen('loading-screen');
         showScreen('welcome-screen');
     }, 2000);
-});
-
-// Service Worker registration
-function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-                console.log('Service Worker enregistré:', registration);
-                
-                // Check for updates
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            showToast('Nouvelle version disponible. Redémarrez l\'app.', 'info');
-                        }
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Erreur Service Worker:', error);
-            });
-    }
-}
-
-// PWA Install Prompt
-let deferredPrompt;
-
-function setupInstallPrompt() {
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        showInstallButton();
-    });
-
-    window.addEventListener('appinstalled', () => {
-        console.log('PWA installée');
-        hideInstallButton();
-        showToast('Application installée avec succès !', 'success');
-    });
-}
-
-function showInstallButton() {
-    const installButton = document.createElement('button');
-    installButton.id = 'install-button';
-    installButton.className = 'btn btn-secondary';
-    installButton.innerHTML = '📱 Installer l\'App';
-    installButton.onclick = installApp;
-    
-    const welcomeContainer = document.querySelector('#welcome-screen .container');
-    if (welcomeContainer && !document.getElementById('install-button')) {
-        welcomeContainer.appendChild(installButton);
-    }
-}
-
-function hideInstallButton() {
-    const installButton = document.getElementById('install-button');
-    if (installButton) {
-        installButton.remove();
-    }
-}
-
-function installApp() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((result) => {
-            if (result.outcome === 'accepted') {
-                console.log('Installation acceptée');
-            } else {
-                console.log('Installation refusée');
-            }
-            deferredPrompt = null;
-            hideInstallButton();
-        });
-    }
 }
 
 // Data persistence functions
 function saveData() {
-    localStorage.setItem('eliasDechlapp_videos', JSON.stringify(videos));
-    localStorage.setItem('eliasDechlapp_unlocked', JSON.stringify(unlockedVideos));
-    localStorage.setItem('eliasDechlapp_data', JSON.stringify(appData));
+    try {
+        localStorage.setItem('eliasDechlapp_videos', JSON.stringify(videos));
+        localStorage.setItem('eliasDechlapp_unlocked', JSON.stringify(unlockedVideos));
+        localStorage.setItem('eliasDechlapp_data', JSON.stringify(appData));
+    } catch (e) {
+        console.error('Error saving data:', e);
+        showToast('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 function loadData() {
-    const savedVideos = localStorage.getItem('eliasDechlapp_videos');
-    const savedUnlocked = localStorage.getItem('eliasDechlapp_unlocked');
-    const savedData = localStorage.getItem('eliasDechlapp_data');
-    
-    if (savedVideos) {
-        videos = JSON.parse(savedVideos);
-    } else {
-        // Initialize with demo videos
-        videos = [
-            {
-                id: 1,
-                name: 'Vidéo d\'introduction',
-                url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                keyword: 'debut',
-                ambientSound: null,
-                description: 'La première vidéo de l\'escape game'
-            }
-        ];
-    }
-    
-    if (savedUnlocked) {
-        unlockedVideos = JSON.parse(savedUnlocked);
-    }
-    
-    if (savedData) {
-        appData = { ...appData, ...JSON.parse(savedData) };
-    }
-    
-    // Apply saved background
-    if (appData.backgroundImage) {
-        document.body.style.backgroundImage = `url(${appData.backgroundImage})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
+    try {
+        const savedVideos = localStorage.getItem('eliasDechlapp_videos');
+        const savedUnlocked = localStorage.getItem('eliasDechlapp_unlocked');
+        const savedData = localStorage.getItem('eliasDechlapp_data');
+        
+        if (savedVideos) {
+            videos = JSON.parse(savedVideos);
+        } else {
+            // Initialize with demo videos
+            videos = [
+                {
+                    id: 1,
+                    name: 'Vidéo d\'introduction',
+                    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                    keyword: 'debut',
+                    ambientSound: null,
+                    description: 'La première vidéo de l\'escape game'
+                }
+            ];
+        }
+        
+        if (savedUnlocked) {
+            unlockedVideos = JSON.parse(savedUnlocked);
+        }
+        
+        if (savedData) {
+            appData = { ...appData, ...JSON.parse(savedData) };
+        }
+        
+        // Apply saved background
+        if (appData.backgroundImage) {
+            document.body.style.backgroundImage = `url(${appData.backgroundImage})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+        }
+    } catch (e) {
+        console.error('Error loading data:', e);
+        showToast('Erreur lors du chargement', 'error');
     }
 }
 
@@ -148,6 +104,11 @@ function showScreen(screenId) {
         screen.classList.remove('active');
     });
     document.getElementById(screenId).classList.add('active');
+    
+    // Vibrate on screen change (mobile feedback)
+    if (navigator.vibrate) {
+        navigator.vibrate(50);
+    }
 }
 
 function hideScreen(screenId) {
@@ -195,6 +156,10 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             showAdminInterface();
         } else {
             showError('login-error', 'Mot de passe admin incorrect');
+            // Vibrate on error
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
         }
     } else {
         if (password === appData.passwords.joueur) {
@@ -208,6 +173,10 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             showPlayerInterface();
         } else {
             showError('login-error', 'Mot de passe joueur incorrect');
+            // Vibrate on error
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
         }
     }
 });
@@ -218,6 +187,10 @@ function checkKeywordOnLogin(keyword) {
         unlockedVideos.push(video.id);
         saveData();
         showToast(`Vidéo "${video.name}" débloquée !`, 'success');
+        // Vibrate on success
+        if (navigator.vibrate) {
+            navigator.vibrate([50, 100, 50]);
+        }
     }
 }
 
@@ -277,11 +250,19 @@ function checkKeyword() {
             renderVideosList();
             showResult('keyword-result', `Bravo ! Vidéo "${video.name}" débloquée !`, 'success');
             showToast(`Vidéo "${video.name}" débloquée !`, 'success');
+            // Vibrate on success
+            if (navigator.vibrate) {
+                navigator.vibrate([50, 100, 50, 100, 50]);
+            }
         } else {
             showResult('keyword-result', 'Cette vidéo est déjà débloquée', 'error');
         }
     } else {
         showResult('keyword-result', 'Mot-clé incorrect. Essayez encore...', 'error');
+        // Vibrate on error
+        if (navigator.vibrate) {
+            navigator.vibrate([100, 50, 100]);
+        }
     }
     
     document.getElementById('player-keyword').value = '';
@@ -302,7 +283,15 @@ function playVideo(video) {
     }
     
     // Play video
-    modalVideo.play().catch(e => console.log('Could not play video:', e));
+    modalVideo.play().catch(e => {
+        console.log('Could not play video:', e);
+        showToast('Erreur lors de la lecture vidéo', 'error');
+    });
+    
+    // Hide status bar for fullscreen video experience
+    if (StatusBar) {
+        StatusBar.hide();
+    }
 }
 
 function closeVideo() {
@@ -315,6 +304,11 @@ function closeVideo() {
     ambientAudio.pause();
     ambientAudio.src = '';
     modal.classList.remove('active');
+    
+    // Show status bar again
+    if (StatusBar) {
+        StatusBar.show();
+    }
 }
 
 // Admin Interface
@@ -435,7 +429,10 @@ function toggleVideoLock(videoId) {
 }
 
 function deleteVideo(videoId) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?')) {
+    // Use native confirm dialog on mobile
+    const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?');
+    
+    if (confirmed) {
         videos = videos.filter(v => v.id !== videoId);
         unlockedVideos = unlockedVideos.filter(id => id !== videoId);
         saveData();
@@ -509,24 +506,29 @@ function changePlayerPassword() {
 // QR Code Generation
 function generateQR() {
     const qrContainer = document.getElementById('qr-code');
-    const currentUrl = window.location.href;
+    // Use a generic URL for mobile app
+    const appUrl = 'https://eliasdeckler.app';
     
     qrContainer.innerHTML = '';
     
-    QRCode.toCanvas(qrContainer, currentUrl, {
-        width: 200,
-        height: 200,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        margin: 2
-    }, function (error) {
-        if (error) {
-            console.error('Erreur génération QR Code:', error);
-            showToast('Erreur lors de la génération du QR Code', 'error');
-        } else {
-            showToast('QR Code généré avec succès', 'success');
-        }
-    });
+    if (typeof QRCode !== 'undefined') {
+        QRCode.toCanvas(qrContainer, appUrl, {
+            width: 200,
+            height: 200,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            margin: 2
+        }, function (error) {
+            if (error) {
+                console.error('Erreur génération QR Code:', error);
+                showToast('Erreur lors de la génération du QR Code', 'error');
+            } else {
+                showToast('QR Code généré avec succès', 'success');
+            }
+        });
+    } else {
+        showToast('QR Code non disponible hors ligne', 'warning');
+    }
 }
 
 // Utility Functions
@@ -565,7 +567,40 @@ function showToast(message, type = 'info') {
     }, 4000);
 }
 
-// Keyboard shortcuts
+// Mobile-specific event handlers
+document.addEventListener('backbutton', function(e) {
+    e.preventDefault();
+    
+    const modal = document.getElementById('video-modal');
+    if (modal.classList.contains('active')) {
+        closeVideo();
+    } else if (currentUser) {
+        logout();
+    } else {
+        // Ask to exit app
+        if (window.confirm('Voulez-vous quitter l\'application ?')) {
+            navigator.app.exitApp();
+        }
+    }
+}, false);
+
+// Prevent zoom on double tap
+document.addEventListener('touchstart', function(e) {
+    if (e.touches.length > 1) {
+        e.preventDefault();
+    }
+});
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// Keyboard shortcuts for mobile
 document.addEventListener('keydown', function(e) {
     // ESC to close video modal
     if (e.key === 'Escape') {
@@ -588,25 +623,20 @@ document.getElementById('video-modal').addEventListener('click', function(e) {
     }
 });
 
-// Auto-save on window close
-window.addEventListener('beforeunload', function() {
+// Auto-save on app pause
+document.addEventListener('pause', function() {
     saveData();
-});
+}, false);
 
 // Initialize ambient sound if available
-window.addEventListener('load', function() {
+document.addEventListener('resume', function() {
     if (appData.ambientSound) {
         const audio = new Audio(appData.ambientSound);
         audio.loop = true;
         audio.volume = 0.2;
-        
-        // Play on user interaction
-        document.addEventListener('click', function playAmbient() {
-            audio.play().catch(e => console.log('Could not play ambient sound:', e));
-            document.removeEventListener('click', playAmbient);
-        }, { once: true });
+        audio.play().catch(e => console.log('Could not play ambient sound:', e));
     }
-});
+}, false);
 
 // Export functions for global access
 window.showLogin = showLogin;
