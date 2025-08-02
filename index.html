@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS CODE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Page d'accueil -->
+    <div id="home-page" class="page active">
+        <div class="container">
+            <h1 class="logo">NEXUS<br>CODE</h1>
+            <div class="buttons-container">
+                <button class="main-btn admin-btn" onclick="showPage('admin-login')">ADMIN</button>
+                <button class="main-btn player-btn" onclick="showPage('player-login')">JOUEUR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connexion Admin -->
+    <div id="admin-login" class="page">
+        <div class="container">
+            <h1 class="logo">NEXUS<br>CODE</h1>
+            <div class="login-container">
+                <h2>Connexion Admin</h2>
+                <form id="admin-login-form">
+                    <div class="input-group">
+                        <label for="admin-username">Identifiant</label>
+                        <input type="text" id="admin-username" name="username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="admin-password">Mot de passe</label>
+                        <input type="password" id="admin-password" name="password" required>
+                    </div>
+                    <button type="submit" class="login-btn">Se connecter</button>
+                </form>
+                <button class="back-btn" onclick="showPage('home-page')">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connexion Joueur -->
+    <div id="player-login" class="page">
+        <div class="container">
+            <h1 class="logo">NEXUS<br>CODE</h1>
+            <div class="login-container">
+                <h2>Connexion</h2>
+                <form id="player-login-form">
+                    <div class="input-group">
+                        <label for="player-username">Identifiant</label>
+                        <input type="text" id="player-username" name="username" placeholder="Joueur" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="player-password">Mot de passe</label>
+                        <input type="password" id="player-password" name="password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="player-key">Mot clé</label>
+                        <input type="text" id="player-key" name="key" required>
+                    </div>
+                    <button type="submit" class="login-btn">Se connecter</button>
+                </form>
+                <button class="back-btn" onclick="showPage('home-page')">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Vidéos -->
+    <div id="videos-page" class="page">
+        <div class="container">
+            <h1 class="page-title">Vidéos</h1>
+            <div class="videos-grid">
+                <div class="video-item locked" data-video="1">
+                    <div class="video-preview">
+                        <div class="lock-icon">🔒</div>
+                        <h3>VIDÉO 1</h3>
+                    </div>
+                </div>
+                <div class="video-item locked" data-video="2">
+                    <div class="video-preview">
+                        <div class="lock-icon">🔒</div>
+                        <h3>VIDÉO 2</h3>
+                    </div>
+                </div>
+                <div class="video-item locked" data-video="3">
+                    <div class="video-preview">
+                        <div class="lock-icon">🔒</div>
+                        <h3>VIDÉO 3</h3>
+                    </div>
+                </div>
+                <div class="video-item locked" data-video="4">
+                    <div class="video-preview">
+                        <div class="lock-icon">🔒</div>
+                        <h3>VIDÉO 4</h3>
+                    </div>
+                </div>
+            </div>
+            <button class="back-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
+    <!-- Panel Admin -->
+    <div id="admin-panel" class="page">
+        <div class="container">
+            <h1 class="page-title">Admin</h1>
+            <div class="admin-options">
+                <button class="admin-option-btn" onclick="showModal('change-password-modal')">
+                    Changer mot de passe joueur
+                </button>
+                <button class="admin-option-btn" onclick="showModal('add-video-modal')">
+                    Ajouter vidéo
+                </button>
+                <button class="admin-option-btn" onclick="showModal('remove-video-modal')">
+                    Retirer vidéo
+                </button>
+                <button class="admin-option-btn" onclick="showModal('set-key-modal')">
+                    Définir mot clé
+                </button>
+                <button class="admin-option-btn" onclick="showModal('change-background-modal')">
+                    Changer arrière plan
+                </button>
+            </div>
+            <button class="back-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
+    <!-- Modales Admin -->
+    <div id="change-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('change-password-modal')">&times;</span>
+            <h3>Changer mot de passe joueur</h3>
+            <form id="change-password-form">
+                <input type="password" placeholder="Nouveau mot de passe" required>
+                <button type="submit">Confirmer</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('add-video-modal')">&times;</span>
+            <h3>Ajouter vidéo</h3>
+            <form id="add-video-form">
+                <input type="text" placeholder="Titre de la vidéo" required>
+                <input type="url" placeholder="URL de la vidéo" required>
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="remove-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('remove-video-modal')">&times;</span>
+            <h3>Retirer vidéo</h3>
+            <form id="remove-video-form">
+                <select id="video-select" required>
+                    <option value="">Sélectionner une vidéo</option>
+                    <option value="1">VIDÉO 1</option>
+                    <option value="2">VIDÉO 2</option>
+                    <option value="3">VIDÉO 3</option>
+                    <option value="4">VIDÉO 4</option>
+                </select>
+                <button type="submit">Retirer</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="set-key-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('set-key-modal')">&times;</span>
+            <h3>Définir mot clé</h3>
+            <form id="set-key-form">
+                <input type="text" placeholder="Nouveau mot clé" required>
+                <button type="submit">Confirmer</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="change-background-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('change-background-modal')">&times;</span>
+            <h3>Changer arrière plan</h3>
+            <form id="change-background-form">
+                <input type="url" placeholder="URL de l'image" required>
+                <button type="submit">Confirmer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
