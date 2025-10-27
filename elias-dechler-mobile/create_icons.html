@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator</title>
+</head>
+<body>
+    <canvas id="canvas" width="192" height="192"></canvas>
+    
+    <script>
+    function createIcon(size, filename) {
+        const canvas = document.getElementById('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        
+        // Background
+        ctx.fillStyle = '#1a0000';
+        ctx.fillRect(0, 0, size, size);
+        
+        // Circle background
+        const radius = size * 0.4;
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#660000';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${size * 0.5}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('E', size/2, size/2);
+        
+        // Download
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+    
+    // Generate all sizes
+    const sizes = [
+        [36, 'ldpi.png'],
+        [48, 'mdpi.png'],
+        [72, 'hdpi.png'],
+        [96, 'xhdpi.png'],
+        [144, 'xxhdpi.png'],
+        [192, 'xxxhdpi.png']
+    ];
+    
+    setTimeout(() => {
+        sizes.forEach(([size, filename]) => {
+            setTimeout(() => createIcon(size, filename), 100);
+        });
+    }, 1000);
+    </script>
+</body>
+</html>

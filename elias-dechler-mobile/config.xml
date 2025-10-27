@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.eliasdeckler.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Elias Dechler</name>
+    <description>
+        Application d'escape game avec déverrouillage de vidéos par mots-clés
+    </description>
+    <author email="contact@eliasdeckler.com" href="https://eliasdeckler.com">
+        Elias Dechler Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    
+    <!-- Preferences -->
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="android-minSdkVersion" value="24" />
+    <preference name="android-targetSdkVersion" value="35" />
+    <preference name="BackupWebStorage" value="local" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="DisallowOverscroll" value="true" />
+    
+    <!-- Android specific -->
+    <platform name="android">
+        <allow-intent href="market:*" />
+        
+        <!-- App permissions -->
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        
+        <!-- Android version info -->
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:hardwareAccelerated="true" android:usesCleartextTraffic="true" />
+        </edit-config>
+    </platform>
+</widget>

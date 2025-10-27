@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com https://fonts.googleapis.com https://cdn.jsdelivr.net 'unsafe-eval' 'unsafe-inline'; object-src 'none'; connect-src 'self' https:; media-src 'self' data: blob:;">
+    <title>Elias Dechler - Escape Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-content">
+            <h1 class="app-title">Elias Dechler</h1>
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Chargement...</p>
+        </div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen">
+        <div class="container">
+            <h1 class="app-title">Elias Dechler</h1>
+            <p class="subtitle">Escape Game Vidéo</p>
+            <div class="button-container">
+                <button class="btn btn-primary" onclick="showLogin('admin')">
+                    <span class="btn-icon">⚙️</span>
+                    ADMIN
+                </button>
+                <button class="btn btn-primary" onclick="showLogin('joueur')">
+                    <span class="btn-icon">🎮</span>
+                    JOUEUR
+                </button>
+            </div>
+            <div class="qr-section">
+                <button class="btn btn-secondary" onclick="generateQR()">Générer QR Code</button>
+                <div id="qr-code" class="qr-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+        <div class="container">
+            <button class="btn-back" onclick="showWelcome()">← Retour</button>
+            <h2 id="login-title">Connexion</h2>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="username">Identifiant</label>
+                    <input type="text" id="username" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group" id="keyword-group" style="display: none;">
+                    <label for="keyword">Mot-clé (optionnel)</label>
+                    <input type="text" id="keyword" placeholder="Entrez un mot-clé pour débloquer une vidéo">
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+            <div id="login-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Player Interface -->
+    <div id="player-screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2>Interface Joueur</h2>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
+            
+            <div class="keyword-section">
+                <div class="form-group">
+                    <label for="player-keyword">Entrer un mot-clé</label>
+                    <div class="keyword-input-container">
+                        <input type="text" id="player-keyword" placeholder="Tapez votre mot-clé ici...">
+                        <button class="btn btn-primary" onclick="checkKeyword()">Vérifier</button>
+                    </div>
+                </div>
+                <div id="keyword-result" class="result-message"></div>
+            </div>
+
+            <div class="videos-section">
+                <h3>Vidéos disponibles</h3>
+                <div id="videos-list" class="videos-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Interface -->
+    <div id="admin-screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2>Interface Admin</h2>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('videos')">Gestion Vidéos</button>
+                <button class="tab-btn" onclick="showTab('settings')">Paramètres</button>
+                <button class="tab-btn" onclick="showTab('passwords')">Mots de passe</button>
+            </div>
+
+            <!-- Videos Tab -->
+            <div id="videos-tab" class="tab-content active">
+                <div class="section">
+                    <h3>Ajouter une vidéo</h3>
+                    <form id="add-video-form" class="admin-form">
+                        <div class="form-group">
+                            <label for="video-name">Nom de la vidéo</label>
+                            <input type="text" id="video-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-url">URL de la vidéo</label>
+                            <input type="url" id="video-url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label for="video-file">Ou fichier vidéo</label>
+                            <input type="file" id="video-file" accept="video/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="video-keyword">Mot-clé pour débloquer</label>
+                            <input type="text" id="video-keyword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-sound">Son d'ambiance (optionnel)</label>
+                            <input type="file" id="video-sound" accept="audio/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter la vidéo</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h3>Vidéos existantes</h3>
+                    <div id="admin-videos-list" class="admin-videos"></div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="section">
+                    <h3>Paramètres généraux</h3>
+                    <div class="form-group">
+                        <label for="background-image">Image de fond</label>
+                        <input type="file" id="background-image" accept="image/*">
+                        <button class="btn btn-secondary" onclick="changeBackground()">Changer le fond</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="ambient-sound">Son d'ambiance général</label>
+                        <input type="file" id="ambient-sound" accept="audio/*">
+                        <button class="btn btn-secondary" onclick="changeAmbientSound()">Changer le son</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passwords Tab -->
+            <div id="passwords-tab" class="tab-content">
+                <div class="section">
+                    <h3>Gestion des mots de passe</h3>
+                    <div class="form-group">
+                        <label for="admin-password">Nouveau mot de passe Admin</label>
+                        <input type="password" id="admin-password">
+                        <button class="btn btn-secondary" onclick="changeAdminPassword()">Changer</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="player-password">Nouveau mot de passe Joueur</label>
+                        <input type="password" id="player-password">
+                        <button class="btn btn-secondary" onclick="changePlayerPassword()">Changer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVideo()">&times;</span>
+            <video id="modal-video" controls>
+                <source src="" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+            <audio id="video-ambient" loop></audio>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="cordova.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

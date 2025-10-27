@@ -1,0 +1,87 @@
+{
+  "name": "Elias Dechler - Escape Game",
+  "short_name": "Elias Dechler",
+  "description": "Application d'escape game avec déverrouillage de vidéos par mots-clés",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a0000",
+  "theme_color": "#660000",
+  "orientation": "portrait",
+  "categories": ["games", "entertainment"],
+  "lang": "fr",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-96.png", 
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-128.png",
+      "sizes": "128x128", 
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png", 
+      "purpose": "any"
+    },
+    {
+      "src": "icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512", 
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Interface Joueur",
+      "short_name": "Joueur",
+      "description": "Accès direct à l'interface joueur",
+      "url": "./index.html#joueur",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Interface Admin", 
+      "short_name": "Admin",
+      "description": "Accès direct à l'interface admin",
+      "url": "./index.html#admin",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshot2.png", 
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

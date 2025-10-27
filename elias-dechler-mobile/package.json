@@ -1,0 +1,21 @@
+{
+    "name": "com.eliasdeckler.app",
+    "displayName": "Elias Dechler",
+    "version": "1.0.0",
+    "description": "Application d'escape game avec déverrouillage de vidéos par mots-clés",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Elias Dechler Team",
+    "license": "Apache-2.0",
+    "cordova": {
+        "platforms": [
+            "android"
+        ],
+        "plugins": {}
+    },
+    "devDependencies": {
+        "cordova-android": "^14.0.1"
+    }
+}

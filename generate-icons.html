@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générateur d'icônes PWA</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .icon-item { text-align: center; }
+        button { background: #660000; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #880000; }
+    </style>
+</head>
+<body>
+    <h1>Générateur d'icônes - Elias Dechler</h1>
+    <button onclick="generateAllIcons()">Générer toutes les icônes</button>
+    
+    <div class="icon-grid" id="iconGrid"></div>
+
+    <script>
+    const iconSizes = [72, 96, 128, 144, 152, 192, 512];
+    
+    function createIcon(size) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        
+        // Background
+        ctx.fillStyle = '#1a0000';
+        ctx.fillRect(0, 0, size, size);
+        
+        // Circle background
+        const radius = size * 0.39; // 200/512 ≈ 0.39
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#660000';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = size * 0.016; // 8/512 ≈ 0.016
+        ctx.stroke();
+        
+        // Letter E
+        const fontSize = size * 0.547; // 280/512 ≈ 0.547
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${fontSize}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('E', size/2, size/2 + size * 0.02); // Small vertical adjustment
+        
+        return canvas;
+    }
+    
+    function downloadCanvas(canvas, filename) {
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+    
+    function generateAllIcons() {
+        const grid = document.getElementById('iconGrid');
+        grid.innerHTML = '';
+        
+        iconSizes.forEach(size => {
+            const canvas = createIcon(size);
+            
+            const container = document.createElement('div');
+            container.className = 'icon-item';
+            
+            const label = document.createElement('h3');
+            label.textContent = `${size}x${size}`;
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = 'Télécharger';
+            downloadBtn.onclick = () => downloadCanvas(canvas, `icon-${size}.png`);
+            
+            container.appendChild(label);
+            container.appendChild(canvas);
+            container.appendChild(downloadBtn);
+            
+            grid.appendChild(container);
+        });
+    }
+    
+    // Auto-generate on page load
+    setTimeout(generateAllIcons, 500);
+    </script>
+</body>
+</html>
